@@ -1,0 +1,21 @@
+﻿@model SomerenApp.Models.Activity
+
+<h2>Edit Activity</h2>
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="ActivityID" />
+
+    <div class="form-group">
+        <label asp-for="ActivityName"></label>
+        <input asp-for="ActivityName" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ActivityDateTime"></label>
+        <input asp-for="ActivityDateTime" type="datetime-local" class="form-control" required />
+    </div>
+
+    <button type="submit" class="btn btn-success">Save Changes</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+

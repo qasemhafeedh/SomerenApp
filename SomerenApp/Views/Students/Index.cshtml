@@ -1,0 +1,38 @@
+﻿﻿<!-- Index.cshtml -->
+@model IEnumerable<SomerenApp.Models.Student>
+
+<h2>Students List</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Add New Student</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Student Number</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Phone Number</th>
+            <th>Class</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var student in Model)
+        {
+            <tr>
+                <td>@student.StudentID</td>
+                <td>@student.FirstName</td>
+                <td>@student.LastName</td>
+                <td>@student.PhoneNumber</td>
+                <td>@student.Class</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@student.StudentID" class="btn btn-warning">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@student.StudentID" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
