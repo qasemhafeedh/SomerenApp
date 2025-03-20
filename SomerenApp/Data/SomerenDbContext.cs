@@ -9,8 +9,9 @@ namespace SomerenApp.Data
 
         public DbSet<Student> Students { get; set; }
         public DbSet<Lecturer> Lecturers { get; set; }
-        public DbSet<Room> Rooms { get; set; }
+        
         public DbSet<Activity> Activities { get; set; }
     }
+
 }
 

@@ -2,7 +2,11 @@
 @model IEnumerable<SomerenApp.Models.Lecturer>
 
 <h2>Lecturers List</h2>
-
+<form method="get">
+    <input type="text" name="lastNameFilter" value="@Context.Request.Query["lastNameFilter"]"
+           placeholder="Search by Last Name" class="form-control" style="width: 300px; display: inline-block;" />
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
 <p>
     <a asp-action="Create" class="btn btn-primary">Add New Lecturer</a>
 </p>

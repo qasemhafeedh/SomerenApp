@@ -16,6 +16,25 @@
         .content-wrapper {
             flex: 1;
         }
+
+        navbar-nav .nav-link {
+            color: white !important; /* Ensures initial white color */
+            transition: color 0.3s ease, background-color 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: mediumvioletred !important; /* Ensure color changes on hover */
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            padding: 5px 10px;
+        }
+
+        .navbar-nav .nav-link.active-page {
+            color: mediumvioletred !important;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            padding: 5px 10px;
+        }
     </style>
 </head>
 <body>
@@ -30,23 +49,19 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-white @(ViewContext.RouteData.Values["Controller"].ToString() == "Home" ? "active-page" : "")" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Students" asp-action="Index">Students</a>
+                            <a class="nav-link text-white @(ViewContext.RouteData.Values["Controller"].ToString() == "Students" ? "active-page" : "")" asp-area="" asp-controller="Students" asp-action="Index">Students</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Lecturers" asp-action="Index">Lecturers</a>
+                            <a class="nav-link text-white @(ViewContext.RouteData.Values["Controller"].ToString() == "Lecturers" ? "active-page" : "")" asp-area="" asp-controller="Lecturers" asp-action="Index">Lecturers</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Rooms" asp-action="Index">Rooms</a>
+                            <a class="nav-link text-white @(ViewContext.RouteData.Values["Controller"].ToString() == "Activities" ? "active-page" : "")" asp-area="" asp-controller="Activities" asp-action="Index">Activities</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Activities" asp-action="Index">Activities</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+                        
+
                     </ul>
                 </div>
             </div>

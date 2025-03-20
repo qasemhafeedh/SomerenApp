@@ -2,7 +2,11 @@
 @model IEnumerable<SomerenApp.Models.Activity>
 
 <h2>Activities List</h2>
-
+<form method="get">
+    <input type="text" name="nameFilter" value="@Context.Request.Query["nameFilter"]"
+           placeholder="Search by Activity Name" class="form-control" style="width: 300px; display: inline-block;" />
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
 <!-- Add Activity Button -->
 <p>
     <a asp-action="Create" class="btn btn-primary">Add New Activity</a>

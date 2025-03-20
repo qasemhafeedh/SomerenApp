@@ -1,5 +1,4 @@
-﻿<!-- Edit.cshtml -->
-@model SomerenApp.Models.Lecturer
+﻿@model SomerenApp.Models.Lecturer
 
 <h2>Edit Lecturer</h2>
 
@@ -31,7 +30,7 @@
     </div>
 
     <button type="submit" class="btn btn-success">Save Changes</button>
-    <a asp-action="LecturerList" class="btn btn-secondary">Cancel</a>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
 </form>
 
 @section Scripts {
@@ -39,5 +38,3 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
-
-

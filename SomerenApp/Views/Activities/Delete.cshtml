@@ -5,8 +5,8 @@
 <h3>@Model.ActivityName</h3>
 <p>@Model.ActivityDateTime</p>
 
-<form asp-action="DeleteConfirmed">
-    <input type="hidden" asp-for="ActivityID" />
+<form asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" name="ActivityID" value="@Model.ActivityID" />
 
     <button type="submit" class="btn btn-danger">Yes, Delete</button>
     <a asp-action="Index" class="btn btn-secondary">Cancel</a>

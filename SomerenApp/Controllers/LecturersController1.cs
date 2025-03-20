@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SomerenApp.Data;
 using SomerenApp.Models;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,10 +17,26 @@ namespace SomerenApp.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        // ✅ Improved: Index method with filtering, sorting, and exception handling
+        public async Task<IActionResult> Index(string lastNameFilter)
         {
-            var lecturers = await _context.Lecturers.ToListAsync();
-            return View(lecturers);
+            try
+            {
+                var lecturers = _context.Lecturers.AsQueryable();
+
+                if (!string.IsNullOrEmpty(lastNameFilter))
+                {
+                    lecturers = lecturers.Where(l => l.LastName.Contains(lastNameFilter));
+                }
+
+                return View(await lecturers.OrderBy(l => l.LastName).ToListAsync());
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = "An error occurred while retrieving lecturers. Please try again.";
+                Console.WriteLine($"Error fetching lecturers: {ex.Message}");
+                return View(new List<Lecturer>());
+            }
         }
 
         public IActionResult Create()
@@ -27,72 +44,100 @@ namespace SomerenApp.Controllers
             return View();
         }
 
+        // ✅ Improved: Exception handling in Create method
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Lecturer lecturer)
         {
             if (ModelState.IsValid)
             {
-                _context.Lecturers.Add(lecturer);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    _context.Lecturers.Add(lecturer);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateException ex)
+                {
+                    ViewBag.ErrorMessage = "Error saving lecturer. Please try again.";
+                    Console.WriteLine($"Database error: {ex.Message}");
+                    return View("Create", lecturer);
+                }
             }
-            return View(lecturer);
+            return View("Create", lecturer);
         }
 
+        // ✅ Improved: Using reusable method to get lecturer by ID
         public async Task<IActionResult> Edit(int id)
         {
-            var lecturer = await _context.Lecturers.FindAsync(id);
+            var lecturer = await GetLecturerByIdAsync(id);
             if (lecturer == null)
                 return NotFound();
 
             return View(lecturer);
         }
 
+        // ✅ Improved: Exception handling in Edit method
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Lecturer lecturer)
         {
             if (ModelState.IsValid)
             {
-                _context.Lecturers.Update(lecturer);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    _context.Lecturers.Update(lecturer);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateException ex)
+                {
+                    ViewBag.ErrorMessage = "Error updating lecturer. Please try again.";
+                    Console.WriteLine($"Database error: {ex.Message}");
+                    return View("Edit", lecturer);
+                }
             }
-            return View(lecturer);
+            return View("Edit", lecturer);
         }
 
+        // ✅ Improved: Using reusable method to get lecturer by ID
         public async Task<IActionResult> Delete(int id)
         {
-            var lecturer = await _context.Lecturers.FindAsync(id);
+            var lecturer = await GetLecturerByIdAsync(id);
             if (lecturer == null)
                 return NotFound();
 
-            return View(lecturer);
+            return View("Delete", lecturer);
         }
 
+        // ✅ Improved: Delete confirmation with exception handling
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int LecturerID)
         {
-            var lecturer = await _context.Lecturers.FindAsync(id);
+            var lecturer = await GetLecturerByIdAsync(LecturerID);
             if (lecturer == null)
-            {
                 return NotFound();
-            }
 
             try
             {
                 _context.Lecturers.Remove(lecturer);
                 await _context.SaveChangesAsync();
+                Console.WriteLine("Lecturer deleted successfully.");
             }
             catch (DbUpdateException)
             {
-                ModelState.AddModelError("", "Unable to delete. The lecturer might be linked to other records.");
-                return View("Delete", lecturer);
+                ViewBag.ErrorMessage = "Cannot delete lecturer. This lecturer is assigned to activities.";
+                return RedirectToAction(nameof(Index));
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        // ✅ Improved: Reusable method to fetch lecturer by ID
+        private async Task<Lecturer> GetLecturerByIdAsync(int id)
+        {
+            return await _context.Lecturers.FirstOrDefaultAsync(l => l.LecturerID == id);
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿<!-- Delete.cshtml -->
-@model SomerenApp.Models.Student
+﻿@model SomerenApp.Models.Student
 
 <h2>Are you sure you want to delete this student?</h2>
 
@@ -7,10 +6,9 @@
 <p>@Model.PhoneNumber</p>
 <p>@Model.Class</p>
 
-<form asp-action="DeleteConfirmed">
-    <input type="hidden" asp-for="StudentID" />
+<form asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" name="StudentID" value="@Model.StudentID" />
 
     <button type="submit" class="btn btn-danger">Yes, Delete</button>
     <a asp-action="Index" class="btn btn-secondary">Cancel</a>
 </form>
-
